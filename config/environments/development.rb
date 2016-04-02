@@ -38,4 +38,7 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Auto-reload require files or local gems without restarting server during Rails development.
+  RequireReloader.watch_local_gems!
 end
