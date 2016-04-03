@@ -42,6 +42,10 @@ gem 'yahoo-finance', :path => '/Users/abalonperin/dev/yahoo-finance'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
+
+  gem 'factory_girl_rails'
+
+  gem 'rspec-rails'
 end
 
 group :development do
@@ -49,6 +53,10 @@ group :development do
   gem 'web-console', '~> 2.0'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
+  #gem 'spring'
+
+  # Pry is a powerful alternative to the standard IRB shell for Ruby.
+  # It features syntax highlighting, a flexible plugin architecture, runtime invocation and source and documentation browsing.
+  #gem 'pry-rails'
 end
 

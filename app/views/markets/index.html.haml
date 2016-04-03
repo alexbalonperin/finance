@@ -10,7 +10,7 @@
     - @markets.each do |market|
       %tr
         %td= market.name
-        %td= market.country
+        %td= market.country.name
         %td= link_to 'Show', market
         %td= link_to 'Edit', edit_market_path(market)
         %td= link_to 'Destroy', market, method: :delete, data: { confirm: 'Are you sure?' }

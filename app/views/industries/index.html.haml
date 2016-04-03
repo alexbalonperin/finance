@@ -10,7 +10,7 @@
     - @industries.each do |industry|
       %tr
         %td= industry.name
-        %td= industry.sector
+        %td= industry.sector.name
         %td= link_to 'Show', industry
         %td= link_to 'Edit', edit_industry_path(industry)
         %td= link_to 'Destroy', industry, method: :delete, data: { confirm: 'Are you sure?' }
