@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160402032300) do
+ActiveRecord::Schema.define(version: 20160410092009) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,21 @@ ActiveRecord::Schema.define(version: 20160402032300) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "historical_data", force: :cascade do |t|
+    t.date     "trade_date"
+    t.decimal  "open"
+    t.decimal  "high"
+    t.decimal  "low"
+    t.decimal  "close"
+    t.integer  "volume"
+    t.decimal  "adjusted_close"
+    t.integer  "company_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "historical_data", ["company_id"], name: "index_historical_data_on_company_id", using: :btree
 
   create_table "industries", force: :cascade do |t|
     t.string   "name"
@@ -64,6 +79,7 @@ ActiveRecord::Schema.define(version: 20160402032300) do
   add_index "sectors", ["name"], name: "index_sectors_on_name", unique: true, using: :btree
 
   add_foreign_key "companies", "industries"
+  add_foreign_key "historical_data", "companies"
   add_foreign_key "industries", "sectors"
   add_foreign_key "markets", "countries"
 end

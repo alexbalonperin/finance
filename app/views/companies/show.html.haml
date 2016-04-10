@@ -4,10 +4,12 @@
   = @company.name
 %p
   %strong Sector:
-  = @company.sector
+  = @company.sector.name
 %p
   %strong Symbol:
   = @company.symbol
 = link_to 'Edit', edit_company_path(@company)
 |
 = link_to 'Back', companies_path
+|
+= link_to 'Historical Data', company_historical_data_path(@company)

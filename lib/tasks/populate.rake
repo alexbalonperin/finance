@@ -8,6 +8,19 @@ namespace :populate do
     nyse_companies + nasdaq_companies + amex_companies
   end
 
+  def historical_data(companies)
+    yahoo_client = YahooFinance::Client.new
+    companies.inject({}) do |h, company|
+      puts "Getting historical data for : #{company.name}"
+      begin
+        h[company.id] = yahoo_client.historical_quotes(company.symbol)
+      rescue StandardError => e
+        puts "Couldn't fetch data for company #{company.name}. Error: #{e.message}"
+      end
+      h
+    end
+  end
+
   company_to_industry = lambda do |company|
     sector = Sector.find_by_name(company.sector)
     if sector.nil?
@@ -61,4 +74,28 @@ namespace :populate do
     BulkUpdater.update(Company, missing_companies)
   end
 
+  desc 'populate the database with historical data for all companies in the database'
+  task historical_data: :environment do
+    companies = Company.
+        joins('left join historical_data hd on hd.company_id = companies.id').
+        where('hd.id is null').limit(1000)
+    companies.each_slice(50) do |batch|
+      historical_data(batch).each do |company_id, records|
+        records.each do |record|
+          h = HistoricalDatum.new
+          h.trade_date = record.trade_date
+          h.open = record.open
+          h.high = record.high
+          h.low = record.low
+          h.close = record.close
+          h.volume = record.volume
+          h.adjusted_close = record.adjusted_close
+          h.company_id = company_id
+          unless h.save
+            puts "Couldn't save historical data for company : #{company_id}"
+          end
+        end
+      end
+    end
+  end
 end

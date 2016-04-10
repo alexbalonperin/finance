@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
+  mount Peek::Railtie => '/peek'
+
   resources :markets
   resources :countries
-  resources :companies
+  resources :companies do
+    resources :historical_data
+  end
   resources :industries
   resources :sectors
   # The priority is based upon order of creation: first created -> highest priority.

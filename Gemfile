@@ -42,10 +42,7 @@ gem 'yahoo-finance', :path => '/Users/abalonperin/dev/yahoo-finance'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-
-  gem 'factory_girl_rails'
-
-  gem 'rspec-rails'
+  gem 'faker'
 end
 
 group :development do
@@ -58,5 +55,14 @@ group :development do
   # Pry is a powerful alternative to the standard IRB shell for Ruby.
   # It features syntax highlighting, a flexible plugin architecture, runtime invocation and source and documentation browsing.
   #gem 'pry-rails'
+  gem "awesome_print", require:"ap"
+  gem 'meta_request'
+  gem 'quiet_assets'
+  gem 'peek'
+end
+
+group :test do
+  gem 'factory_girl_rails'
+  gem 'rspec-rails'
 end
 

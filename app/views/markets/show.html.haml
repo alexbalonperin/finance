@@ -4,7 +4,7 @@
   = @market.name
 %p
   %strong Country:
-  = @market.country
+  = @market.country.name
 = link_to 'Edit', edit_market_path(@market)
 |
 = link_to 'Back', markets_path
