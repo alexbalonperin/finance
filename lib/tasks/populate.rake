@@ -16,6 +16,7 @@ namespace :populate do
         h[company.id] = yahoo_client.historical_quotes(company.symbol)
       rescue StandardError => e
         puts "Couldn't fetch data for company #{company.name}. Error: #{e.message}"
+        company.update(:skip_historical_data => true)
       end
       h
     end
@@ -78,23 +79,20 @@ namespace :populate do
   task historical_data: :environment do
     companies = Company.
         joins('left join historical_data hd on hd.company_id = companies.id').
-        where('hd.id is null').limit(1000)
+        where('hd.id is null and skip_historical_data is false').limit(1000)
     companies.each_slice(50) do |batch|
-      historical_data(batch).each do |company_id, records|
-        records.each do |record|
-          h = HistoricalDatum.new
-          h.trade_date = record.trade_date
-          h.open = record.open
-          h.high = record.high
-          h.low = record.low
-          h.close = record.close
-          h.volume = record.volume
-          h.adjusted_close = record.adjusted_close
-          h.company_id = company_id
-          unless h.save
-            puts "Couldn't save historical data for company : #{company_id}"
-          end
+      historical_data(batch).each do |company_id, prices|
+        data = prices.inject([]) do |arr, record|
+          arr << HistoricalDatum.new(trade_date: record.trade_date,
+                                  open: record.open,
+                                  high: record.high,
+                                  low: record.low,
+                                  close: record.close,
+                                  volume: record.volume,
+                                  adjusted_close: record.adjusted_close,
+                                  company_id: company_id)
         end
+        HistoricalDatum.import(data)
       end
     end
   end

@@ -35,6 +35,8 @@ gem 'require_reloader'
 # gem 'yahoo-finance', :github => 'herval/yahoo-finance', :branch => 'markets_improvements'
 gem 'yahoo-finance', :path => '/Users/abalonperin/dev/yahoo-finance'
 
+gem "stock_quote"
+
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -59,6 +61,7 @@ group :development do
   gem 'meta_request'
   gem 'quiet_assets'
   gem 'peek'
+  gem 'activerecord-import'
 end
 
 group :test do

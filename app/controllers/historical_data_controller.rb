@@ -5,7 +5,7 @@ class HistoricalDataController < ApplicationController
   # GET /historical_data
   # GET /historical_data.json
   def index
-    @historical_data = @company.historical_data.order(trade_date: :desc)
+    @historical_data = @company.historical_data.limit(100).order(trade_date: :desc)
   end
 
   # GET /historical_data/1
