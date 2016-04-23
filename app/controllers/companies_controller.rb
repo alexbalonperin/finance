@@ -11,11 +11,19 @@ class CompaniesController < ApplicationController
                      .order("#{params[:sort] || 'companies.name'} #{params[:order]}")
                      .limit(params[:limit])
                      .offset(params[:offset])
-    @companies = @companies
-                     .joins([:industry, :sector])
-                     .where('industries.name ~* ? OR sectors.name ~* ? OR companies.name ~* ? OR companies.symbol ~* ?',
-                            params[:search], params[:search], params[:search], params[:search]) if params[:search].present?
-    @count = Company.count
+    if params[:search].present?
+      @companies = @companies
+                       .joins([:industry, :sector])
+                       .where('industries.name ~* ? OR sectors.name ~* ? OR companies.name ~* ? OR lower(companies.symbol) = lower(?)',
+                              params[:search], params[:search], params[:search], params[:search])
+      @count = Company
+                   .joins([:industry, :sector])
+                   .where('industries.name ~* ? OR sectors.name ~* ? OR companies.name ~* ? OR lower(companies.symbol) = lower(?)',
+                          params[:search], params[:search], params[:search], params[:search])
+                    .count
+    else
+      @count = Company.count
+    end
     respond_to do |format|
       format.json { render json: { :total => @count,
                                    :rows => @companies.map(&:to_json) } }

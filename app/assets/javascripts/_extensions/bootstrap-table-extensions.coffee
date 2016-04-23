@@ -16,6 +16,7 @@ $ ->
       stickyHeader = options.stickyHeader ? true
       paginationVAlign = options.paginationVAlign ? 'both'
       sortOrder = options.sortOrder ? 'asc'
+      searchOnEnterKey = options.searchOnEnterKey ? true
       sortParams = sortParams ? {}
 
       table.bootstrapTable
@@ -24,6 +25,7 @@ $ ->
         paginationVAlign: paginationVAlign
         columns: col
         sortOrder: sortOrder
+        searchOnEnterKey: searchOnEnterKey
         queryParams: (params) ->
           if sortParams[params['sort']] != undefined
             params['sort'] = sortParams[params['sort']]

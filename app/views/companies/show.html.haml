@@ -6,6 +6,9 @@
   %strong Sector:
   = @company.sector.name
 %p
+  %strong industry:
+  = @company.industry.name
+%p
   %strong Symbol:
   = @company.symbol
 = link_to 'Edit', edit_company_path(@company)
