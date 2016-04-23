@@ -11,16 +11,23 @@ $ ->
       value.toString().commify() + '円'
     commify: (value) ->
       value.toString().commify()
-    initTable: (table, col, options = {}) ->
+    initTable: (table, col, sortParams, options = {}) ->
       pageSize = options.pageSize ? 100
       stickyHeader = options.stickyHeader ? true
       paginationVAlign = options.paginationVAlign ? 'both'
+      sortOrder = options.sortOrder ? 'asc'
+      sortParams = sortParams ? {}
 
       table.bootstrapTable
         pageSize: pageSize
         stickyHeader: stickyHeader
         paginationVAlign: paginationVAlign
         columns: col
+        sortOrder: sortOrder
+        queryParams: (params) ->
+          if sortParams[params['sort']] != undefined
+            params['sort'] = sortParams[params['sort']]
+          params
       # sometimes footer render error.
       setTimeout (->
         table.bootstrapTable 'resetView'

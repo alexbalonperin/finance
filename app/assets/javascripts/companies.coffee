@@ -1,6 +1,9 @@
 $ ->
-  $table = $('#table')
+  $table = $('#companies_table')
   utils = $.fn.bootstrapTable.utils
+
+  operateFormatter = (value, row) ->
+    '<a class="historical_data" href="/companies/' + row.id + '/historical_data/" title="Historical Prices">Historical Prices</a> '
 
   columns = [ [
     {
@@ -23,12 +26,19 @@ $ ->
       align: 'left'
     }
     {
-      title: 'Actions'
+      title: ''
       align: 'center'
-#      events: actionEvents
+      sortable: false
+      formatter: operateFormatter
     }
   ] ]
-  utils.initTable($table, columns)
+
+  sort_params = {
+    industry: 'industries.name'
+    sector: 'sectors.name'
+  };
+  utils.initTable($table, columns, sort_params)
+
   return
 
 

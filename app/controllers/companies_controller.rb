@@ -8,9 +8,13 @@ class CompaniesController < ApplicationController
 
   def list
     @companies = Company.includes([:industry, :sector])
-                     .order("#{params[:sort] || 'name'} #{params[:order]}")
+                     .order("#{params[:sort] || 'companies.name'} #{params[:order]}")
                      .limit(params[:limit])
                      .offset(params[:offset])
+    @companies = @companies
+                     .joins([:industry, :sector])
+                     .where('industries.name ~* ? OR sectors.name ~* ? OR companies.name ~* ? OR companies.symbol ~* ?',
+                            params[:search], params[:search], params[:search], params[:search]) if params[:search].present?
     @count = Company.count
     respond_to do |format|
       format.json { render json: { :total => @count,

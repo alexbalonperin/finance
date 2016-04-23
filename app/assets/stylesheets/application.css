@@ -13,7 +13,6 @@
  *= require bootstrap.min
  *= require bootstrap-table.min
  *= require bootstrap-table-sticky-header
- *= require_tree .
  *= require_self
  */
 

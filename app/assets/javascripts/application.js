@@ -16,4 +16,5 @@
 //= require bootstrap-table.min
 //= require bootstrap-table-sticky-header.min
 //= require turbolinks
-//= require_tree .
+//= require util
+//= require_tree ./_extensions

@@ -1,5 +1,5 @@
 $ ->
-  $table = $('#table')
+  $table = $('#historical_prices_table')
   utils = $.fn.bootstrapTable.utils
 
   columns =  [ [
@@ -33,6 +33,6 @@ $ ->
       title: 'Adjusted close'
     }
   ] ]
-  utils.initTable($table, columns)
+  utils.initTable($table, columns, null, {sortOrder: 'desc'})
   return
 
