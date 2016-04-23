@@ -11,6 +11,8 @@
  * file per style scope.
  *
  *= require bootstrap.min
+ *= require bootstrap-table.min
+ *= require bootstrap-table-sticky-header
  *= require_tree .
  *= require_self
  */
@@ -23,3 +25,4 @@
     url('/assets/glyphicons-halflings-regular.ttf') format('truetype'),
     url('/assets/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
+

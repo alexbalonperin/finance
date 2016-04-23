@@ -1,3 +1,38 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
+$ ->
+  $table = $('#table')
+  utils = $.fn.bootstrapTable.utils
+
+  columns =  [ [
+    {
+      field: 'trade_date'
+      title: 'Trade Date'
+    }
+    {
+      field: 'open'
+      title: 'Open'
+    }
+    {
+      field: 'high'
+      title: 'High'
+    }
+    {
+      field: 'low'
+      title: 'Low'
+    }
+    {
+      field: 'close'
+      title: 'Close'
+    }
+    {
+      field: 'volume'
+      title: 'Volume',
+      formatter: utils.commify
+    }
+    {
+      field: 'adjusted_close'
+      title: 'Adjusted close'
+    }
+  ] ]
+  utils.initTable($table, columns)
+  return
+

@@ -5,7 +5,18 @@ class HistoricalDataController < ApplicationController
   # GET /historical_data
   # GET /historical_data.json
   def index
-    @historical_data = @company.historical_data.limit(100).order(trade_date: :desc)
+  end
+
+  def list
+    @historical_data = @company.historical_data
+                           .limit(params[:limit])
+                           .offset(params[:offset])
+                           .order("#{params[:sort] || 'trade_date'} #{params[:order]}")
+    @count = @company.historical_data.count
+    respond_to do |format|
+      format.json { render json: { :total => @count,
+                                    :rows => @historical_data } }
+    end
   end
 
   # GET /historical_data/1

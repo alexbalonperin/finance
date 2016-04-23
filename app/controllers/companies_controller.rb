@@ -4,7 +4,18 @@ class CompaniesController < ApplicationController
   # GET /companies
   # GET /companies.json
   def index
+  end
+
+  def list
     @companies = Company.includes([:industry, :sector])
+                     .order("#{params[:sort] || 'name'} #{params[:order]}")
+                     .limit(params[:limit])
+                     .offset(params[:offset])
+    @count = Company.count
+    respond_to do |format|
+      format.json { render json: { :total => @count,
+                                   :rows => @companies.map(&:to_json) } }
+    end
   end
 
   # GET /companies/1

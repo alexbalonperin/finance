@@ -7,15 +7,10 @@
     / The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags
 
     %title Finance
-    / Bootstrap
-    = stylesheet_link_tag    'bootstrap.min', media: 'all', 'data-turbolinks-track' => true
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
-    = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
   %body
     = render 'peek/bar'
-    = yield
-    / jQuery (necessary for Bootstrap's JavaScript plugins)
-    %script{:src => "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"}
-    / Include all compiled plugins (below), or include individual files as needed
-    = javascript_include_tag 'bootstrap.min', 'data-turbolinks-track' => true
+    .container-fluid
+      = yield
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true

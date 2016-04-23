@@ -4,7 +4,11 @@ Rails.application.routes.draw do
   resources :markets
   resources :countries
   resources :companies do
-    resources :historical_data
+    resources :historical_data do
+      get 'list', on: :collection
+    end
+
+    get 'list', on: :collection
   end
   resources :industries
   resources :sectors

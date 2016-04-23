@@ -1,33 +1,9 @@
 %h1="Listing historical data for #{@company.name}"
 
-%table
-  %thead
-    %tr
-      %th Trade date
-      %th Open
-      %th High
-      %th Low
-      %th Close
-      %th Volume
-      %th Adjusted close
-      %th
-      %th
-      %th
+= link_to 'all companies', companies_url
 
-  %tbody
-    - @historical_data.each do |historical_datum|
-      %tr
-        %td= historical_datum.trade_date
-        %td= historical_datum.open
-        %td= historical_datum.high
-        %td= historical_datum.low
-        %td= historical_datum.close
-        %td= historical_datum.volume
-        %td= historical_datum.adjusted_close
-        %td= link_to 'Show', company_historical_datum_path(@company, historical_datum)
-        %td= link_to 'Edit', edit_company_historical_datum_path(@company, historical_datum)
-        %td= link_to 'Destroy', [@company, historical_datum], :method => :delete, :data => { :confirm => 'Are you sure?' }
-
-%br
-
-= link_to 'New Historical datum', new_company_historical_datum_path(@company)
+%table#table.table-striped{'data-pagination' => 'true',
+             'data-page-list' => '[10, 25, 50, 100, 200, 500]',
+             'data-show-refresh' => 'true',
+             'data-side-pagination' => 'server',
+             'data-url' => "/companies/#{@company.id}/historical_data/list"}

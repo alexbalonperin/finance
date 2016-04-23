@@ -1,22 +1,7 @@
-%p#notice= notice
-%h1 Listing Companies
-%table
-  %thead
-    %tr
-      %th Symbol
-      %th Name
-      %th Industry
-      %th Sector
-      %th{:colspan => "3"}
-  %tbody
-    - @companies.each do |company|
-      %tr
-        %td= company.symbol
-        %td= company.name
-        %td= company.industry.name
-        %td= company.sector.name
-        %td= link_to 'Show', company
-        %td= link_to 'Edit', edit_company_path(company)
-        %td= link_to 'Destroy', company, method: :delete, data: { confirm: 'Are you sure?' }
-%br/
+-#%p#notice= notice
+
+%table#table.table-striped{'data-pagination' => 'true',
+             'data-page-list' => '[10, 25, 50, 100, 200, 500]',
+             'data-side-pagination' => 'server',
+             'data-url' => "/companies/list"}
 = link_to 'New Company', new_company_path
