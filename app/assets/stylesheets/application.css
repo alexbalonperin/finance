@@ -13,6 +13,9 @@
  *= require bootstrap.min
  *= require bootstrap-table.min
  *= require bootstrap-table-sticky-header
+ *= require sidebar
+ *= require colors
+ *= require font-awesome
  *= require_self
  */
 
@@ -24,4 +27,13 @@
     url('/assets/glyphicons-halflings-regular.ttf') format('truetype'),
     url('/assets/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
+
+* {
+    color: #808a98;
+}
+
+body {
+    background-color: #f5f8fb;
+}
+
 

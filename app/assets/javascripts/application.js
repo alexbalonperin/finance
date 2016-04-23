@@ -18,3 +18,17 @@
 //= require turbolinks
 //= require util
 //= require_tree ./_extensions
+
+$("#menu-toggle").click(function(e) {
+    e.preventDefault();
+    $("#wrapper").toggleClass("toggled");
+    if($("#wrapper").hasClass("toggled")) {
+        $(this).animate({left: '-=210'}, 300)
+        $(this).html('<i class="glyphicon glyphicon-arrow-right"></i>')
+        $(this).css('border-radius', '0px 0px 10px 0px');
+    } else {
+        $(this).animate({left: '+=210'}, 300)
+        $(this).html('<i class="glyphicon glyphicon-arrow-left"></i>')
+        $(this).css('border-radius', '0px 0px 0px 10px');
+    }
+});
