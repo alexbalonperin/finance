@@ -1,16 +1,21 @@
 %p#notice= notice
-%h1 Listing Sectors
-%table
-  %thead
-    %tr
-      %th Name
-      %th{:colspan => "3"}
-  %tbody
-    - @sectors.each do |sector|
-      %tr
-        %td= sector.name
-        %td= link_to 'Show', sector
-        %td= link_to 'Edit', edit_sector_path(sector)
-        %td= link_to 'Destroy', sector, method: :delete, data: { confirm: 'Are you sure?' }
-%br/
-= link_to 'New Sector', new_sector_path
+
+.row
+  .col-md-6
+    .element-container
+      #sector_chart(style="width:100%; height:400px;")
+  .col-md-6
+    .element-container
+      %h1 Sectors
+      %hr
+      %table.table
+        %thead
+          %tr
+            %th Name
+            %th{:colspan => "3"}
+        %tbody
+          - @sectors.each do |sector|
+            %tr
+              %td= sector.name
+              %td= link_to 'Show', sector
+              %td= link_to 'Edit', edit_sector_path(sector)

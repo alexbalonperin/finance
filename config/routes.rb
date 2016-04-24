@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     end
 
     get 'list', on: :collection
+    get 'companies_by_sector', on: :collection
   end
   resources :industries
   resources :sectors

@@ -36,4 +36,10 @@ body {
     background-color: #f5f8fb;
 }
 
+.element-container {
+    background-color: white;
+    border: 1px solid #EAEAEA;
+    padding: 10px 30px 10px 30px;
+    box-shadow: 1px 1px 1px #f5f8fb;
+}
 

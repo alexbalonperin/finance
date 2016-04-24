@@ -15,6 +15,8 @@
 //= require bootstrap.min
 //= require bootstrap-table.min
 //= require bootstrap-table-sticky-header.min
+//= require colors
+//= require highstock
 //= require turbolinks
 //= require util
 //= require_tree ./_extensions

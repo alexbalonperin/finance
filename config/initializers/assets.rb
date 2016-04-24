@@ -19,4 +19,6 @@ Rails.application.config.assets.precompile += %w( bootstrap.min.js
                                                   companies.scss
                                                   historical_data.coffee
                                                   historical_data.scss
+                                                  sectors.coffee
+                                                  sectors.scss
                                               )
