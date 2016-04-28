@@ -19,6 +19,15 @@ class HistoricalDataController < ApplicationController
     end
   end
 
+  def prices
+    historical_data = @company.historical_data
+                           .order("#{params[:sort] || 'trade_date'} #{params[:order]}")
+    result = historical_data.map { |data| [data.trade_date_as_timestamp, data.adjusted_close.to_f] }
+    respond_to do |format|
+      format.json { render json: result }
+    end
+  end
+
   # GET /historical_data/1
   # GET /historical_data/1.json
   def show

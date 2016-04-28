@@ -10,7 +10,7 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require bootstrap.min
+ *= require bootstrap
  *= require bootstrap-table.min
  *= require bootstrap-table-sticky-header
  *= require sidebar
@@ -39,7 +39,16 @@ body {
 .element-container {
     background-color: white;
     border: 1px solid #EAEAEA;
-    padding: 10px 30px 10px 30px;
     box-shadow: 1px 1px 1px #f5f8fb;
+
 }
 
+.title {
+    padding: 10px 30px 10px 30px;
+    font-size: 22px;
+    border-bottom: 1px solid #EAEAEA;
+}
+
+.content {
+    padding: 10px 30px 10px 30px;
+}

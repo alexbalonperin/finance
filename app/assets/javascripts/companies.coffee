@@ -4,7 +4,6 @@ $ ->
 
   operateFormatter = (value, row) ->
     [
-      '<a class="historical_data" href="/companies/' + row.id + '/historical_data/" title="Historical Prices">Historical Prices</a> ',
       '<a class="show" href="/companies/' + row.id + '" title="show">Show</a> ',
 
     ].join('')

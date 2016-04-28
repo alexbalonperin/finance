@@ -2,12 +2,11 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-chart = undefined;
-
+chart = undefined
 $ ->
   options = ({
     chart: {
-      backgroundColor:'transparent'
+      backgroundColor: 'transparent'
       type: 'pie'
     }
     title: {
@@ -21,4 +20,4 @@ $ ->
   $.getJSON url, (data) ->
     options.series[0].data = data
     chart = $('#sector_chart').highcharts(options)
-  return
+    return

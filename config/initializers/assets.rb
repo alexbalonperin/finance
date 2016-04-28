@@ -9,16 +9,16 @@ Rails.application.config.assets.version = '1.0'
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
-Rails.application.config.assets.precompile += %w( bootstrap.min.js
-                                                  bootstrap.min.css
+Rails.application.config.assets.precompile += %w( bootstrap.min.css
+                                                  bootstrap.min.js
                                                   bootstrap-table.min.css
                                                   bootstrap-table.min.js
                                                   bootstrap-table-sticky-header.css
                                                   bootstrap-table-sticky-header.min.js
-                                                  companies.coffee
                                                   companies.scss
-                                                  historical_data.coffee
+                                                  companies.coffee
                                                   historical_data.scss
-                                                  sectors.coffee
+                                                  historical_data.coffee
                                                   sectors.scss
+                                                  sectors.coffee
                                               )

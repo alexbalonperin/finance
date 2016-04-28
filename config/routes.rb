@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :companies do
     resources :historical_data do
       get 'list', on: :collection
+      get 'prices', on: :collection
     end
 
     get 'list', on: :collection
