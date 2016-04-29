@@ -8,7 +8,7 @@
 
     %title Finance
     = stylesheet_link_tag    'application', media: 'all'
-    = stylesheet_link_tag params[:controller]
+    -#= stylesheet_link_tag params[:controller]
     = csrf_meta_tags
   %body
     = render 'peek/bar'
@@ -25,6 +25,6 @@
       / #page-content-wrapper
     / #wrapper
     = javascript_include_tag 'application'
-    = javascript_include_tag params[:controller]
-    = content_for :scripts
+    /= javascript_include_tag params[:controller]
+    /= content_for :scripts
 

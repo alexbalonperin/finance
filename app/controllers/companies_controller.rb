@@ -30,14 +30,6 @@ class CompaniesController < ApplicationController
     end
   end
 
-  def companies_by_sector
-    sectors = Company.joins(:sector).group('sectors.name').count
-
-    respond_to do |format|
-      format.json { render json:  sectors.sort_by {|k, v| v}.map { |k, v| {name: k, y: v} } }
-    end
-  end
-
   # GET /companies/1
   # GET /companies/1.json
   def show

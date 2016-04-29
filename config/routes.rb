@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   mount Peek::Railtie => '/peek'
 
+  concern :commentable do
+    resources :comments
+  end
+
   resources :markets
   resources :countries
   resources :companies do
@@ -10,10 +14,14 @@ Rails.application.routes.draw do
     end
 
     get 'list', on: :collection
-    get 'companies_by_sector', on: :collection
   end
-  resources :industries
-  resources :sectors
+  resources :industries do
+    get 'companies_ratio', on: :collection
+  end
+  resources :sectors do
+    get 'companies_ratio'
+    get 'companies_ratio', on: :collection
+  end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

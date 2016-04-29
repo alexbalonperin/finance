@@ -1,18 +1,7 @@
-%p#notice= notice
-%h1 Listing Industries
-%table
-  %thead
-    %tr
-      %th Name
-      %th Sector
-      %th{:colspan => "3"}
-  %tbody
-    - @industries.each do |industry|
-      %tr
-        %td= industry.name
-        %td= industry.sector.name
-        %td= link_to 'Show', industry
-        %td= link_to 'Edit', edit_industry_path(industry)
-        %td= link_to 'Destroy', industry, method: :delete, data: { confirm: 'Are you sure?' }
-%br/
-= link_to 'New Industry', new_industry_path
+.row
+  .col-md-12
+    .element-container
+      #industry_chart{'data-url' => '/industries/companies_ratio'}
+.row
+  .col-md-6
+    = render :partial => 'list', :locals => { :industries => @industries }

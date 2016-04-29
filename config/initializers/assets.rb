@@ -15,10 +15,12 @@ Rails.application.config.assets.precompile += %w( bootstrap.min.css
                                                   bootstrap-table.min.js
                                                   bootstrap-table-sticky-header.css
                                                   bootstrap-table-sticky-header.min.js
-                                                  companies.scss
-                                                  companies.coffee
-                                                  historical_data.scss
-                                                  historical_data.coffee
-                                                  sectors.scss
-                                                  sectors.coffee
                                               )
+# companies.scss
+# companies.coffee
+# historical_data.scss
+# historical_data.coffee
+# sectors.scss
+# sectors.coffee
+# industries.scss
+# industries.coffee

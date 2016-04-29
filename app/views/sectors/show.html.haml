@@ -1,7 +1,16 @@
-%p#notice= notice
-%p
-  %strong Name:
-  = @sector.name
-= link_to 'Edit', edit_sector_path(@sector)
-|
+= link_to 'Back', sectors_path
+.row
+  .col-md-12
+    .element-container
+      #industry_chart{'data-url' => "/sectors/#{@sector.id}/companies_ratio"}
+.row
+  .col-md-6
+    .element-container
+      .title Sector
+      .content
+        %p
+          %strong Name:
+          = @sector.name
+  .col-md-6
+    = render :partial => 'industries/list', :locals => { :industries =>  @industries }
 = link_to 'Back', sectors_path

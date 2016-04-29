@@ -1,5 +1,5 @@
 class SectorsController < ApplicationController
-  before_action :set_sector, only: [:show, :edit, :update, :destroy]
+  before_action :set_sector, only: [:show, :edit, :update, :destroy, :companies_ratio]
 
   # GET /sectors
   # GET /sectors.json
@@ -10,11 +10,24 @@ class SectorsController < ApplicationController
   # GET /sectors/1
   # GET /sectors/1.json
   def show
+    @industries = @sector.industries
   end
 
   # GET /sectors/new
   def new
     @sector = Sector.new
+  end
+
+  def companies_ratio
+    if @sector.present?
+      sectors = @sector.companies.joins(:industry).where("industries.name != 'n/a'").group('industries.name').count
+    else
+      sectors = Company.joins(:sector).where("sectors.name != 'n/a'").group('sectors.name').count
+    end
+
+    respond_to do |format|
+      format.json { render json:  sectors.sort_by {|_, v| v}.map { |k, v| {name: k, y: v} } }
+    end
   end
 
   # GET /sectors/1/edit
@@ -64,7 +77,11 @@ class SectorsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_sector
-      @sector = Sector.find(params[:id])
+      if params[:id].present?
+        @sector = Sector.find(params[:id])
+      elsif params[:sector_id].present?
+        @sector = Sector.find(params[:sector_id])
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

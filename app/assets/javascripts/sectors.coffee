@@ -15,8 +15,8 @@ $ ->
     colors: [@blue, @green, @yellow, @red, @blue_green]
     series: [{}]
   })
-
-  url = '/companies/companies_by_sector'
+  $chart = $('#sector_chart')
+  url = $chart.data('url')
   $.getJSON url, (data) ->
     options.series[0].data = data
     chart = $('#sector_chart').highcharts(options)

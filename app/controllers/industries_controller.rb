@@ -4,12 +4,20 @@ class IndustriesController < ApplicationController
   # GET /industries
   # GET /industries.json
   def index
-    @industries = Industry.includes(:sector)
+    @industries = Industry.includes(:sector, :companies)
   end
 
   # GET /industries/1
   # GET /industries/1.json
   def show
+  end
+
+  def companies_ratio
+    industries = Company.joins(:industry).where("industries.name != 'n/a'").group('industries.name').having('count(*) > ?', 40).count
+
+    respond_to do |format|
+      format.json { render json:  industries.sort_by {|k, v| v}.map { |k, v| {name: k, y: v} } }
+    end
   end
 
   # GET /industries/new

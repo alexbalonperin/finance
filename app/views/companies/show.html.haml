@@ -1,18 +1,33 @@
-%p#notice= notice
-%p
-  %strong Name:
-  = @company.name
-%p
-  %strong Sector:
-  = @company.sector.name
-%p
-  %strong industry:
-  = @company.industry.name
-%p
-  %strong Symbol:
-  = @company.symbol
-
-#company_chart
+= link_to 'Back', companies_path
+.row
+  .col-md-5
+    .element-container
+      .title Company
+      .content
+        %p#notice= notice
+        %p
+          %strong Name:
+          = @company.name
+        %p
+          %strong Sector:
+          = @company.sector.name
+        %p
+          %strong industry:
+          = @company.industry.name
+        %p
+          %strong Symbol:
+          = @company.symbol
+  .col-md-7
+    .element-container
+      .title Key Statistics
+      .content
+.row
+  .col-md-12
+    .element-container
+      .title Historical Prices
+      .content
+        #company_chart{'data-url' => "/companies/#{@company.id}/historical_data/prices",
+                       'data-name' => @company.name }
 
 %table#historical_prices_table.table-striped{'data-pagination' => 'true',
              'data-page-list' => '[10, 25, 50, 100, 200, 500]',
@@ -20,60 +35,9 @@
              'data-side-pagination' => 'server',
              'data-url' => "/companies/#{@company.id}/historical_data/list"}
 
-= link_to 'Edit', edit_company_path(@company)
-|
 = link_to 'Back', companies_path
-|
-= link_to 'Historical Data', company_historical_data_path(@company)
 
-- content_for :scripts do
-  %script(src='/assets/historical_data')
-  :javascript
-    var createChart,
-      seriesOptions = [],
-      seriesCounter = 0;
+-#- content_for :scripts do
+-#  %script(src='/assets/historical_data')
+-#  %script(src='/assets/charts/companies')
 
-    createChart = function() {
-      $('#company_chart').highcharts('StockChart', {
-        rangeSelector: {
-          selected: 4
-        },
-        yAxis: {
-          labels: {
-            formatter: function() {
-              return (this.value > 0 ? ' + ' : '') + this.value + '%';
-            }
-          },
-          plotLines: [
-            {
-              value: 0,
-              width: 2,
-              color: 'silver'
-            }
-          ]
-        },
-        plotOptions: {
-          series: {
-            compare: 'percent'
-          }
-        },
-        tooltip: {
-          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
-          valueDecimals: 2
-        },
-        series: seriesOptions
-      });
-    };
-    $(function() {
-      var url;
-
-      url = "/companies/#{@company.id}/historical_data/prices";
-
-      $.getJSON(url, function(data) {
-        seriesOptions[0] = {
-          name: '#{@company.name}',
-          data: data
-        };
-        createChart();
-      });
-    });
