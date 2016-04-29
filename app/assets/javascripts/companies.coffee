@@ -2,10 +2,15 @@ $ ->
   $table = $('#companies_table')
   utils = $.fn.bootstrapTable.utils
 
+  industryLink = (value, row) ->
+    '<a class="show" href="/industries/' + row.industry_id + '" title="Show industry: ' + row.industry + '">' + row.industry + '</a> '
+
+  sectorLink = (value, row) ->
+    '<a class="show" href="/sectors/' + row.sector_id + '" title="Show sector: ' + row.sector + '">' + row.sector + '</a> '
+
   operateFormatter = (value, row) ->
     [
-      '<a class="show" href="/companies/' + row.id + '" title="show">Show</a> ',
-
+      '<a class="show" href="/companies/' + row.id + '" title="Show company: ' + row.name + '">Show</a> '
     ].join('')
   columns = [ [
     {
@@ -21,11 +26,13 @@ $ ->
       field: 'industry'
       title: 'Industry'
       align: 'left'
+      formatter: industryLink
     }
     {
       field: 'sector'
       title: 'Sector'
       align: 'left'
+      formatter: sectorLink
     }
     {
       title: ''

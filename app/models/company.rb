@@ -9,7 +9,9 @@ class Company < ActiveRecord::Base
         :symbol => symbol,
         :name => name,
         :industry => industry.name,
-        :sector => sector.name
+        :sector => sector.name,
+        :industry_id => industry_id,
+        :sector_id => sector.id
     }
   end
 end

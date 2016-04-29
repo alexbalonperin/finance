@@ -10,10 +10,10 @@
           = @company.name
         %p
           %strong Sector:
-          = @company.sector.name
+          = link_to @company.sector.name, sector_path(@company.sector.id)
         %p
           %strong industry:
-          = @company.industry.name
+          = link_to @company.industry.name, industry_path(@company.industry_id)
         %p
           %strong Symbol:
           = @company.symbol
@@ -29,15 +29,14 @@
         #company_chart{'data-url' => "/companies/#{@company.id}/historical_data/prices",
                        'data-name' => @company.name }
 
-%table#historical_prices_table.table-striped{'data-pagination' => 'true',
-             'data-page-list' => '[10, 25, 50, 100, 200, 500]',
-             'data-show-refresh' => 'true',
-             'data-side-pagination' => 'server',
-             'data-url' => "/companies/#{@company.id}/historical_data/list"}
+.row
+  .col-md-12
+    .element-container
+      .title Historical Prices
+      .content
+        %table#historical_prices_table.table-striped{'data-pagination' => 'true',
+                   'data-page-list' => '[10, 25, 50, 100, 200, 500]',
+                   'data-side-pagination' => 'server',
+                   'data-url' => "/companies/#{@company.id}/historical_data/list"}
 
 = link_to 'Back', companies_path
-
--#- content_for :scripts do
--#  %script(src='/assets/historical_data')
--#  %script(src='/assets/charts/companies')
-
