@@ -1,10 +1,6 @@
 Rails.application.routes.draw do
   mount Peek::Railtie => '/peek'
 
-  concern :commentable do
-    resources :comments
-  end
-
   resources :markets
   resources :countries
   resources :companies do

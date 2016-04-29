@@ -1,9 +1,8 @@
-createChart = undefined
 seriesOptions = []
 seriesCounter = 0
 
-createChart = ->
-  $('#company_chart').highcharts 'StockChart',
+createChart = ($chart_div) ->
+  $chart_div.highcharts 'StockChart',
     rangeSelector: selected: 4
     yAxis:
       labels: formatter: ->
@@ -21,13 +20,13 @@ createChart = ->
   return
 
 $ ->
-  $chart = $('#company_chart')
-  url = $chart.data('url')
-  name = $chart.data('name')
-  $.getJSON url, (data) ->
-    seriesOptions[0] =
-      name: name
-      data: data
-    createChart()
-    return
+  @stock_chart = ($chart_div) ->
+    url = $chart_div.data('url')
+    name = $chart_div.data('name')
+    $.getJSON url, (data) ->
+      seriesOptions[0] =
+        name: name
+        data: data
+      createChart($chart_div)
+      return
   return

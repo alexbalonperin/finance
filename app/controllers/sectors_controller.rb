@@ -4,7 +4,7 @@ class SectorsController < ApplicationController
   # GET /sectors
   # GET /sectors.json
   def index
-    @sectors = Sector.all
+    @sectors = Sector.includes(:industries, :companies)
   end
 
   # GET /sectors/1
@@ -78,7 +78,7 @@ class SectorsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_sector
       if params[:id].present?
-        @sector = Sector.find(params[:id])
+        @sector = Sector.includes(:companies).find(params[:id])
       elsif params[:sector_id].present?
         @sector = Sector.find(params[:sector_id])
       end

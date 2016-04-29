@@ -16,7 +16,9 @@
 //= require bootstrap-table.min
 //= require bootstrap-table-sticky-header.min
 //= require highstock
-//= require_tree .
+//= require_tree ./_extensions
+//= require_tree ./charts
+//= require_directory .
 
 $("#menu-toggle").click(function(e) {
     e.preventDefault();

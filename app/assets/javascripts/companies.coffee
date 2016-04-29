@@ -41,6 +41,10 @@ $ ->
   };
   utils.initTable($table, columns, sort_params)
 
+  $chart_div = $('#company_chart')
+  if $chart_div.length
+    @stock_chart($chart_div)
+
   return
 
 
