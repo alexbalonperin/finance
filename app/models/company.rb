@@ -23,10 +23,14 @@ class Company < ActiveRecord::Base
         :delisted => delisted,
         :inactive => !active,
         :liquidated => liquidated,
-        :merged => parent.present?,
+        :merged => merged?,
         :changed => became.present?,
         :details => details
     }
+  end
+
+  def merged?
+    parent.present?
   end
 
   def details

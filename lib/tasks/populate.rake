@@ -118,4 +118,14 @@ namespace :populate do
       end
     end
   end
+
+  desc 'mark companies as inactive'
+  task deactivate: :environment do
+    companies = Company.where('active = true')
+    to_deactivate = companies.select { |c| c.liquidated || c.delisted || c.became.present? || c.merged? }
+    puts "Found #{to_deactivate.size} companies to deactivate"
+    to_deactivate = Company.find(to_deactivate.map(&:id))
+    to_deactivate.each { |c| c.update(:active => false) }
+    puts 'Done deactivating companies'
+  end
 end
