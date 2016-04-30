@@ -18,6 +18,7 @@ $ ->
       sortOrder = options.sortOrder ? 'asc'
       searchOnEnterKey = options.searchOnEnterKey ? true
       sortParams = sortParams ? {}
+      rowStyle = options.rowStyle ? {}
 
       table.bootstrapTable
         pageSize: pageSize
@@ -26,6 +27,7 @@ $ ->
         columns: col
         sortOrder: sortOrder
         searchOnEnterKey: searchOnEnterKey
+        rowStyle: rowStyle
         queryParams: (params) ->
           if sortParams[params['sort']] != undefined
             params['sort'] = sortParams[params['sort']]

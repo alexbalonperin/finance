@@ -16,7 +16,9 @@
  *= require sidebar
  *= require colors
  *= require font-awesome
+ *= require_tree ./extensions
  *= require_self
+ *= require companies
  */
 
 @font-face {
@@ -52,3 +54,7 @@ body {
 .content {
     padding: 10px 30px 10px 30px;
 }
+
+
+
+

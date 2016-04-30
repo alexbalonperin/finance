@@ -7,7 +7,7 @@ class CompaniesController < ApplicationController
   end
 
   def list
-    @companies = Company.includes([:industry, :sector])
+    @companies = Company.includes([:industry, :sector, :parent, :companies_changes_from])
                      .order("#{params[:sort] || 'companies.name'} #{params[:order]}")
                      .limit(params[:limit])
                      .offset(params[:offset])

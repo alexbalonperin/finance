@@ -1,11 +1,18 @@
 namespace :populate do
 
   def companies
-    yahoo_client = YahooFinance::Client.new
-    nyse_companies = yahoo_client.companies_by_market('us', 'nyse')
-    nasdaq_companies = yahoo_client.companies_by_market('us', 'nasdaq')
-    amex_companies = yahoo_client.companies_by_market('us', 'amex')
+    nyse_companies = get_companies('us', 'nyse')
+    nasdaq_companies = get_companies('us', 'nasdaq')
+    amex_companies = get_companies('us', 'amex')
     nyse_companies + nasdaq_companies + amex_companies
+  end
+
+  def get_companies(country, market_name)
+    client.companies_by_market(country, market_name)
+  end
+
+  def client
+    @client ||= YahooFinance::Client.new
   end
 
   def historical_data(companies)
@@ -50,6 +57,19 @@ namespace :populate do
     Rake::Task['companies'].invoke
   end
 
+  desc 'set market to company'
+  task markets: :environment do
+    Market.select(:name).map(&:name).each do |name|
+      nyse_companies = get_companies('us', name.downcase)
+      puts "Number of companies on the #{name} market: #{nyse_companies.size}."
+      companies = Company.where("market_id is null and symbol in ('#{nyse_companies.map{|c| c.symbol.strip }.join("', '")}')")
+      puts "Found #{companies.size} companies to update."
+      companies.update_all(:market_id => Market.find_by_name(name).id)
+      puts "Done adding market to companies in #{name}."
+    end
+    puts 'DONE'
+  end
+
   desc 'populate the database with a list of sectors from the web'
   task sectors: :environment do
     sectors = Sector.select(:name)
@@ -68,10 +88,12 @@ namespace :populate do
 
   desc 'populate the database with a list of companies from the web'
   task companies: :environment do
-    cur_companies = Company.select(:name)
+    cur_companies = Company.select(:name).map(&:name)
     company_to_company = lambda { |company| Company.new(:industry => Industry.find_by_name(company.industry), :name => company.name, :symbol => company.symbol) }
     missing_companies = companies.reject { |company| cur_companies.include?(company.name) }
     missing_companies = missing_companies.map(&company_to_company).uniq(&:name)
+    next unless missing_companies.size > 0
+    puts "Found #{missing_companies.size} companies to add."
     BulkUpdater.update(Company, missing_companies)
   end
 

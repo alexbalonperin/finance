@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160417084144) do
+ActiveRecord::Schema.define(version: 20160430063135) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,11 +23,25 @@ ActiveRecord::Schema.define(version: 20160417084144) do
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
     t.boolean  "skip_historical_data", default: false
+    t.integer  "market_id"
+    t.boolean  "liquidated",           default: false
+    t.boolean  "delisted",             default: false
+    t.boolean  "active",               default: true
   end
 
   add_index "companies", ["industry_id"], name: "index_companies_on_industry_id", using: :btree
   add_index "companies", ["name", "symbol", "industry_id"], name: "index_companies_on_name_and_symbol_and_industry_id", unique: true, using: :btree
   add_index "companies", ["name"], name: "index_companies_on_name", unique: true, using: :btree
+
+  create_table "companies_changes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "from_id"
+    t.integer  "to_id"
+  end
+
+  add_index "companies_changes", ["from_id"], name: "index_companies_changes_on_from_id", using: :btree
+  add_index "companies_changes", ["to_id"], name: "index_companies_changes_on_to_id", using: :btree
 
   create_table "countries", force: :cascade do |t|
     t.string   "name"
@@ -71,6 +85,16 @@ ActiveRecord::Schema.define(version: 20160417084144) do
   add_index "markets", ["country_id"], name: "index_markets_on_country_id", using: :btree
   add_index "markets", ["name", "country_id"], name: "index_markets_on_name_and_country_id", unique: true, using: :btree
 
+  create_table "mergers", force: :cascade do |t|
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "acquiring_id"
+    t.integer  "acquired_id"
+  end
+
+  add_index "mergers", ["acquired_id"], name: "index_mergers_on_acquired_id", using: :btree
+  add_index "mergers", ["acquiring_id"], name: "index_mergers_on_acquiring_id", using: :btree
+
   create_table "sectors", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
@@ -80,7 +104,12 @@ ActiveRecord::Schema.define(version: 20160417084144) do
   add_index "sectors", ["name"], name: "index_sectors_on_name", unique: true, using: :btree
 
   add_foreign_key "companies", "industries"
+  add_foreign_key "companies", "markets"
+  add_foreign_key "companies_changes", "companies", column: "from_id"
+  add_foreign_key "companies_changes", "companies", column: "to_id"
   add_foreign_key "historical_data", "companies"
   add_foreign_key "industries", "sectors"
   add_foreign_key "markets", "countries"
+  add_foreign_key "mergers", "companies", column: "acquired_id"
+  add_foreign_key "mergers", "companies", column: "acquiring_id"
 end

@@ -7,7 +7,7 @@
         %p#notice= notice
         %p
           %strong Name:
-          = @company.name
+          = raw @company.name
         %p
           %strong Sector:
           = link_to @company.sector.name, sector_path(@company.sector.id)

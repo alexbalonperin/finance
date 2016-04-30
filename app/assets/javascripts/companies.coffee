@@ -45,8 +45,33 @@ $ ->
   sort_params = {
     industry: 'industries.name'
     sector: 'sectors.name'
-  };
-  utils.initTable($table, columns, sort_params)
+  }
+
+  options = {
+    rowStyle : (row) ->
+      if row.delisted
+        return {
+          classes: 'delisted'
+        }
+      if row.merged
+        return {
+          classes: 'merged'
+        }
+      if row.liquidated
+        return {
+          classes: 'liquidated'
+        }
+      if row.inactive
+        return {
+          classes: 'inactive'
+        }
+      if row.changed
+        return {
+          classes: 'changed'
+        }
+      return {}
+  }
+  utils.initTable($table, columns, sort_params, options)
 
   $chart_div = $('#company_chart')
   if $chart_div.length
