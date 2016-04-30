@@ -35,6 +35,11 @@ $ ->
       formatter: sectorLink
     }
     {
+      field: 'details'
+      title: 'Details'
+      align: 'left'
+    }
+    {
       title: ''
       align: 'center'
       sortable: false

@@ -17,6 +17,10 @@
         %p
           %strong Symbol:
           = @company.symbol
+        - if @company.details.present?
+          %p
+            %strong Details:
+            = @company.details
   .col-md-7
     .element-container
       .title Key Statistics
