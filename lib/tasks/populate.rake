@@ -1,32 +1,9 @@
+require "#{Rails.root}/lib/client/yahoo"
+
 namespace :populate do
 
-  def companies
-    nyse_companies = get_companies('us', 'nyse')
-    nasdaq_companies = get_companies('us', 'nasdaq')
-    amex_companies = get_companies('us', 'amex')
-    nyse_companies + nasdaq_companies + amex_companies
-  end
-
-  def get_companies(country, market_name)
-    client.companies_by_market(country, market_name)
-  end
-
   def client
-    @client ||= YahooFinance::Client.new
-  end
-
-  def historical_data(companies)
-    yahoo_client = YahooFinance::Client.new
-    companies.inject({}) do |h, company|
-      puts "Getting historical data for : #{company.name}"
-      begin
-        h[company.id] = yahoo_client.historical_quotes(company.symbol)
-      rescue StandardError => e
-        puts "Couldn't fetch data for company #{company.name}. Error: #{e.message}"
-        company.update(:skip_historical_data => true)
-      end
-      h
-    end
+    @client ||= Client::Yahoo.new
   end
 
   company_to_industry = lambda do |company|
@@ -60,7 +37,7 @@ namespace :populate do
   desc 'set market to company'
   task markets: :environment do
     Market.select(:name).map(&:name).each do |name|
-      nyse_companies = get_companies('us', name.downcase)
+      nyse_companies = client.get_companies('us', name.downcase)
       puts "Number of companies on the #{name} market: #{nyse_companies.size}."
       companies = Company.where("market_id is null and symbol in ('#{nyse_companies.map{|c| c.symbol.strip }.join("', '")}')")
       puts "Found #{companies.size} companies to update."
@@ -73,7 +50,7 @@ namespace :populate do
   desc 'populate the database with a list of sectors from the web'
   task sectors: :environment do
     sectors = Sector.select(:name)
-    missing_companies = companies.reject { |company| sectors.include?(company.sector) }
+    missing_companies = client.all_companies.reject { |company| sectors.include?(company.sector) }
     missing_sectors = missing_companies.map { |company| Sector.new(:name => company.sector) }.uniq(&:name)
     BulkUpdater.update(Sector, missing_sectors)
   end
@@ -81,20 +58,29 @@ namespace :populate do
   desc 'populate the database with a list of industries from the web'
   task industries: :environment do
     industries = Industry.select(:name)
-    missing_companies = companies.reject { |company| industries.include?(company.industry) }
+    missing_companies = client.all_companies.reject { |company| industries.include?(company.industry) }
     missing_industries = missing_companies.map(&company_to_industry).uniq(&:name)
     BulkUpdater.update(Industry, missing_industries)
   end
 
+
   desc 'populate the database with a list of companies from the web'
   task companies: :environment do
-    cur_companies = Company.select(:name).map(&:name)
-    company_to_company = lambda { |company| Company.new(:industry => Industry.find_by_name(company.industry), :name => company.name, :symbol => company.symbol) }
-    missing_companies = companies.reject { |company| cur_companies.include?(company.name) }
-    missing_companies = missing_companies.map(&company_to_company).uniq(&:name)
-    next unless missing_companies.size > 0
-    puts "Found #{missing_companies.size} companies to add."
-    BulkUpdater.update(Company, missing_companies)
+    Market.all.each do |market|
+      company_to_company = lambda do |company|
+        Company.new(:industry => Industry.find_by_name(company.industry),
+                    :name => company.name,
+                    :symbol => company.symbol,
+                    :market_id => market.id)
+      end
+      cur_companies = Company.where("market_id = #{market.id}").select(:name).map(&:name)
+      companies = client.companies(market.country.code, market.name)
+      missing_companies = companies.reject { |company| cur_companies.include?(company.name) }
+      missing_companies = missing_companies.map(&company_to_company).uniq(&:name)
+      next unless missing_companies.size > 0
+      puts "Found #{missing_companies.size} companies to add."
+      BulkUpdater.update(Company, missing_companies)
+    end
   end
 
   desc 'populate the database with historical data for all companies in the database'
@@ -103,17 +89,10 @@ namespace :populate do
         joins('left join historical_data hd on hd.company_id = companies.id').
         where('hd.id is null and skip_historical_data is false').limit(1000)
     companies.each_slice(50) do |batch|
-      historical_data(batch).each do |company_id, prices|
-        data = prices.inject([]) do |arr, record|
-          arr << HistoricalDatum.new(trade_date: record.trade_date,
-                                  open: record.open,
-                                  high: record.high,
-                                  low: record.low,
-                                  close: record.close,
-                                  volume: record.volume,
-                                  adjusted_close: record.adjusted_close,
-                                  company_id: company_id)
-        end
+      client.historical_data(batch).each do |company_id, records|
+        data = records_to_historical_data(records, company_id)
+        last_trade_date = data.sort_by(&:trade_date).last.trade_date
+        Company.find(company_id).update(:last_trade_date => last_trade_date)
         HistoricalDatum.import(data)
       end
     end
@@ -127,5 +106,27 @@ namespace :populate do
     to_deactivate = Company.find(to_deactivate.map(&:id))
     to_deactivate.each { |c| c.update(:active => false) }
     puts 'Done deactivating companies'
+  end
+
+  desc 'last trade date'
+  task last_trade_date: :environment do
+    companies = Company.where('last_trade_date is null and active and skip_historical_data is false')
+    puts "Found #{companies.size} companies without last_trade_date"
+    i = 0
+    companies.each_slice(500) do |batch|
+      puts "Batch : #{i}"
+      updates = batch.inject({}) do |h, company|
+        last_historical_data = company.latest_historical_data
+        if last_historical_data.present?
+          last_trade_date = last_historical_data.first.trade_date
+          h[company.id] = {:last_trade_date => last_trade_date}
+        end
+        h
+      end
+      puts updates
+      Company.update(updates.keys, updates.values)
+      i += 1
+    end
+    puts 'Done.'
   end
 end

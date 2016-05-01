@@ -11,6 +11,11 @@ class Company < ActiveRecord::Base
   has_one :companies_changes_to, :class_name => 'CompaniesChange', :foreign_key => :to_id
   has_one :was, :through => :companies_changes_to, :source => :from
 
+
+  def latest_historical_data
+    historical_data.order('trade_date desc').limit(1)
+  end
+
   def to_json
     {
         :id => id,
