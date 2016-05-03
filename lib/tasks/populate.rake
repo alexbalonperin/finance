@@ -78,23 +78,8 @@ namespace :populate do
       missing_companies = companies.reject { |company| cur_companies.include?(company.name) }
       missing_companies = missing_companies.map(&company_to_company).uniq(&:name)
       next unless missing_companies.size > 0
-      puts "Found #{missing_companies.size} companies to add."
+      puts "Found #{missing_companies.size} companies to add to market #{market.name}."
       BulkUpdater.update(Company, missing_companies)
-    end
-  end
-
-  desc 'populate the database with historical data for all companies in the database'
-  task historical_data: :environment do
-    companies = Company.
-        joins('left join historical_data hd on hd.company_id = companies.id').
-        where('hd.id is null and skip_historical_data is false').limit(1000)
-    companies.each_slice(50) do |batch|
-      client.historical_data(batch).each do |company_id, records|
-        data = records_to_historical_data(records, company_id)
-        last_trade_date = data.sort_by(&:trade_date).last.trade_date
-        Company.find(company_id).update(:last_trade_date => last_trade_date)
-        HistoricalDatum.import(data)
-      end
     end
   end
 

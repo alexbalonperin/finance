@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160501083035) do
+ActiveRecord::Schema.define(version: 20160501101733) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,8 +31,7 @@ ActiveRecord::Schema.define(version: 20160501083035) do
   end
 
   add_index "companies", ["industry_id"], name: "index_companies_on_industry_id", using: :btree
-  add_index "companies", ["name", "symbol", "industry_id"], name: "index_companies_on_name_and_symbol_and_industry_id", unique: true, using: :btree
-  add_index "companies", ["name"], name: "index_companies_on_name", unique: true, using: :btree
+  add_index "companies", ["name", "symbol", "industry_id", "market_id"], name: "index_companies_on_name_symbol_industry_id_market_id", unique: true, using: :btree
 
   create_table "companies_changes", force: :cascade do |t|
     t.datetime "created_at", null: false

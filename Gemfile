@@ -32,6 +32,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use Unicorn as the app server
 # gem 'unicorn'
+# gem 'puma'
+gem "passenger", ">= 5.0.25", require: "phusion_passenger/rack_handler"
+
 
 gem 'require_reloader'
 
