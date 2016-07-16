@@ -40,7 +40,7 @@ class Company < ActiveRecord::Base
   end
 
   def details
-    merger_msg + changes_msg + liquidated_msg + delisted_msg
+    merger_msg.to_s + changes_msg.to_s + liquidated_msg.to_s + delisted_msg.to_s
   end
 
   def merger_msg

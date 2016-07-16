@@ -1,5 +1,6 @@
 class HistoricalDataController < ApplicationController
   before_filter :load_company
+  before_filter :sanitize_order_params, only: [:list, :prices]
   before_action :set_historical_datum, only: [:show, :edit, :update, :destroy]
 
   # GET /historical_data
@@ -11,7 +12,7 @@ class HistoricalDataController < ApplicationController
     @historical_data = @company.historical_data
                            .limit(params[:limit])
                            .offset(params[:offset])
-                           .order("#{params[:sort] || 'trade_date'} #{params[:order]}")
+                           .order("#{@sort || 'trade_date'} #{@order}")
     @count = @company.historical_data.count
     respond_to do |format|
       format.json { render json: { :total => @count,
@@ -21,7 +22,7 @@ class HistoricalDataController < ApplicationController
 
   def prices
     historical_data = @company.historical_data
-                           .order("#{params[:sort] || 'trade_date'} #{params[:order]}")
+                           .order("#{@sort || 'trade_date'} #{@order}")
     result = historical_data.map { |data| [data.trade_date_as_timestamp, data.adjusted_close.to_f] }
     respond_to do |format|
       format.json { render json: result }

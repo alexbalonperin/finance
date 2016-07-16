@@ -1,5 +1,6 @@
 class CompaniesController < ApplicationController
   before_action :set_company, only: [:show, :edit, :update, :destroy]
+  before_filter :sanitize_order_params, only: :list
 
   # GET /companies
   # GET /companies.json
@@ -8,7 +9,7 @@ class CompaniesController < ApplicationController
 
   def list
     @companies = Company.includes([:industry, :sector, :parent, :subsidiaries, :became])
-                     .order("#{params[:sort] || 'companies.name'} #{params[:order]}")
+                     .order("#{@sort || 'companies.name'} #{@order}")
                      .limit(params[:limit])
                      .offset(params[:offset])
     search = params[:search]
