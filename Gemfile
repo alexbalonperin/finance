@@ -69,6 +69,9 @@ group :development do
   gem 'quiet_assets'
   gem 'peek'
   gem 'activerecord-import'
+  gem 'pronto'
+  gem 'pronto-rubocop', require: false
+  gem 'pronto-flay', require: false
 end
 
 group :test do
