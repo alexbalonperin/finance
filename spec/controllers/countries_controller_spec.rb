@@ -24,11 +24,14 @@ RSpec.describe CountriesController, type: :controller do
   # Country. As you add validations to Country, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    FactoryGirl.attributes_for(:country)
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+        :name => nil,
+        :code => nil
+    }
   }
 
   # This should return the minimal set of values that should be in the session
@@ -103,14 +106,18 @@ RSpec.describe CountriesController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {
+            :name => 'USA',
+            :code => 'usa'
+        }
       }
 
       it "updates the requested country" do
         country = Country.create! valid_attributes
         put :update, {:id => country.to_param, :country => new_attributes}, valid_session
         country.reload
-        skip("Add assertions for updated state")
+        expect(country.name).to eq('USA')
+        expect(country.code).to eq('usa')
       end
 
       it "assigns the requested country as @country" do

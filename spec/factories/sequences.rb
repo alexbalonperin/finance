@@ -1,17 +1,25 @@
 FactoryGirl.define do
   sequence :company_name do |n|
-    "#{Faker::Company.name}#{n}"
+    "Amerco #{n}"
   end
 
   sequence :industry_name do |n|
-    "#{Faker::Company.profession}#{n}"
+    "Aerospace #{n}"
   end
 
   sequence :sector_name do |n|
-    "#{Faker::Commerce.department}#{n}"
+    "Technology #{n}"
   end
 
   sequence :country_name do |n|
-    "#{Faker::Address.country}#{n}"
+    "Belgium #{n}"
+  end
+
+  sequence :symbol do |n|
+    "MSFT #{n}"
+  end
+
+  sequence :market_name do |n|
+    "NYSE #{n}"
   end
 end

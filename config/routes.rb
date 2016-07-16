@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  mount Peek::Railtie => '/peek'
+  # mount Peek::Railtie => '/peek'
 
   resources :markets
   resources :countries

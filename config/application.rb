@@ -25,5 +25,16 @@ module Finance
     config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
     config.assets.precompile += %w( .svg .eot .woff .ttf)
     config.action_controller.default_url_options = { :trailing_slash => true }
+    config.generators do |g|
+      g.test_framework :rspec,
+                       :fixtures => true,
+                       :view_specs => true,
+                       :helper_specs => true,
+                       :routing_specs => true,
+                       :controller_specs => true,
+                       :request_specs => true
+      g.fixture_replacement :factory_girl, :dir => "spec/factories"
+    end
+
   end
 end

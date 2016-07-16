@@ -24,11 +24,8 @@ RSpec.describe HistoricalDataController, type: :controller do
   # HistoricalDatum. As you add validations to HistoricalDatum, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
+    FactoryGirl.build(:historical_datum).attributes.symbolize_keys
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
   }
 
   # This should return the minimal set of values that should be in the session
@@ -36,124 +33,37 @@ RSpec.describe HistoricalDataController, type: :controller do
   # HistoricalDataController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET #index" do
+  before do
+    @company = FactoryGirl.create(:company)
+    @historical_datum = FactoryGirl.create(:historical_datum)
+    @company.historical_data << @historical_datum
+  end
+
+  describe "GET #list" do
     it "assigns all historical_data as @historical_data" do
-      historical_datum = HistoricalDatum.create! valid_attributes
-      get :index, {}, valid_session
-      expect(assigns(:historical_data)).to eq([historical_datum])
+      get :list, {:format => :json, :controller => :historical_data, :company_id => @company.id}, valid_session
+      body =  JSON.parse(response.body)
+      expect(body['total']).to eq(1)
+      row = body['rows'].first
+      expect(row['trade_date']).to eq(@historical_datum.trade_date.strftime('%Y-%m-%d'))
+      expect(row['open']).to eq(@historical_datum.open.to_s)
+      expect(row['high']).to eq(@historical_datum.high.to_s)
+      expect(row['low']).to eq(@historical_datum.low.to_s)
+      expect(row['close']).to eq(@historical_datum.close.to_s)
+      expect(row['volume']).to eq(@historical_datum.volume)
+      expect(row['adjusted_close']).to eq(@historical_datum.adjusted_close.to_s)
     end
   end
 
-  describe "GET #show" do
+  describe "GET #prices" do
     it "assigns the requested historical_datum as @historical_datum" do
-      historical_datum = HistoricalDatum.create! valid_attributes
-      get :show, {:id => historical_datum.to_param}, valid_session
-      expect(assigns(:historical_datum)).to eq(historical_datum)
+      get :prices, {:format => :json, :controller => :historical_data, :company_id => @company.id}, valid_session
+      body =  JSON.parse(response.body)
+      result = body.first
+      expect(result[0]).to eq(@historical_datum.trade_date_as_timestamp)
+      expect(result[1]).to eq(@historical_datum.adjusted_close.to_f)
     end
   end
 
-  describe "GET #new" do
-    it "assigns a new historical_datum as @historical_datum" do
-      get :new, {}, valid_session
-      expect(assigns(:historical_datum)).to be_a_new(HistoricalDatum)
-    end
-  end
-
-  describe "GET #edit" do
-    it "assigns the requested historical_datum as @historical_datum" do
-      historical_datum = HistoricalDatum.create! valid_attributes
-      get :edit, {:id => historical_datum.to_param}, valid_session
-      expect(assigns(:historical_datum)).to eq(historical_datum)
-    end
-  end
-
-  describe "POST #create" do
-    context "with valid params" do
-      it "creates a new HistoricalDatum" do
-        expect {
-          post :create, {:historical_datum => valid_attributes}, valid_session
-        }.to change(HistoricalDatum, :count).by(1)
-      end
-
-      it "assigns a newly created historical_datum as @historical_datum" do
-        post :create, {:historical_datum => valid_attributes}, valid_session
-        expect(assigns(:historical_datum)).to be_a(HistoricalDatum)
-        expect(assigns(:historical_datum)).to be_persisted
-      end
-
-      it "redirects to the created historical_datum" do
-        post :create, {:historical_datum => valid_attributes}, valid_session
-        expect(response).to redirect_to(HistoricalDatum.last)
-      end
-    end
-
-    context "with invalid params" do
-      it "assigns a newly created but unsaved historical_datum as @historical_datum" do
-        post :create, {:historical_datum => invalid_attributes}, valid_session
-        expect(assigns(:historical_datum)).to be_a_new(HistoricalDatum)
-      end
-
-      it "re-renders the 'new' template" do
-        post :create, {:historical_datum => invalid_attributes}, valid_session
-        expect(response).to render_template("new")
-      end
-    end
-  end
-
-  describe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested historical_datum" do
-        historical_datum = HistoricalDatum.create! valid_attributes
-        put :update, {:id => historical_datum.to_param, :historical_datum => new_attributes}, valid_session
-        historical_datum.reload
-        skip("Add assertions for updated state")
-      end
-
-      it "assigns the requested historical_datum as @historical_datum" do
-        historical_datum = HistoricalDatum.create! valid_attributes
-        put :update, {:id => historical_datum.to_param, :historical_datum => valid_attributes}, valid_session
-        expect(assigns(:historical_datum)).to eq(historical_datum)
-      end
-
-      it "redirects to the historical_datum" do
-        historical_datum = HistoricalDatum.create! valid_attributes
-        put :update, {:id => historical_datum.to_param, :historical_datum => valid_attributes}, valid_session
-        expect(response).to redirect_to(historical_datum)
-      end
-    end
-
-    context "with invalid params" do
-      it "assigns the historical_datum as @historical_datum" do
-        historical_datum = HistoricalDatum.create! valid_attributes
-        put :update, {:id => historical_datum.to_param, :historical_datum => invalid_attributes}, valid_session
-        expect(assigns(:historical_datum)).to eq(historical_datum)
-      end
-
-      it "re-renders the 'edit' template" do
-        historical_datum = HistoricalDatum.create! valid_attributes
-        put :update, {:id => historical_datum.to_param, :historical_datum => invalid_attributes}, valid_session
-        expect(response).to render_template("edit")
-      end
-    end
-  end
-
-  describe "DELETE #destroy" do
-    it "destroys the requested historical_datum" do
-      historical_datum = HistoricalDatum.create! valid_attributes
-      expect {
-        delete :destroy, {:id => historical_datum.to_param}, valid_session
-      }.to change(HistoricalDatum, :count).by(-1)
-    end
-
-    it "redirects to the historical_data list" do
-      historical_datum = HistoricalDatum.create! valid_attributes
-      delete :destroy, {:id => historical_datum.to_param}, valid_session
-      expect(response).to redirect_to(historical_data_url)
-    end
-  end
 
 end

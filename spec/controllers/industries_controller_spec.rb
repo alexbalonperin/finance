@@ -18,17 +18,20 @@ require 'rails_helper'
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
-RSpec.describe IndustriesController, type: :controller do
+RSpec.describe IndustriesController, type: :controller  do
 
   # This should return the minimal set of attributes required to create a valid
   # Industry. As you add validations to Industry, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    FactoryGirl.build(:industry).attributes.symbolize_keys
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+        :name => nil,
+        :sector_id => nil
+    }
   }
 
   # This should return the minimal set of values that should be in the session
@@ -103,14 +106,16 @@ RSpec.describe IndustriesController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {
+            :name => 'New Industry'
+        }
       }
 
       it "updates the requested industry" do
         industry = Industry.create! valid_attributes
         put :update, {:id => industry.to_param, :industry => new_attributes}, valid_session
         industry.reload
-        skip("Add assertions for updated state")
+        expect(industry.name).to eq('New Industry')
       end
 
       it "assigns the requested industry as @industry" do

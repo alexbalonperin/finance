@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :market do
     country
-    name 'NYSE'
-    created_at Time.now
-    updated_at Time.now
+    name { generate(:market_name) }
+    created_at { Time.now }
+    updated_at { Time.now }
   end
 end

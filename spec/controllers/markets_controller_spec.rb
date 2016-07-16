@@ -24,11 +24,14 @@ RSpec.describe MarketsController, type: :controller do
   # Market. As you add validations to Market, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    FactoryGirl.build(:market).attributes.symbolize_keys
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+        :name => nil,
+        :country_id => nil
+    }
   }
 
   # This should return the minimal set of values that should be in the session
@@ -103,14 +106,16 @@ RSpec.describe MarketsController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {
+            :name => 'New Market'
+        }
       }
 
       it "updates the requested market" do
         market = Market.create! valid_attributes
         put :update, {:id => market.to_param, :market => new_attributes}, valid_session
         market.reload
-        skip("Add assertions for updated state")
+        expect(market.name).to eq('New Market')
       end
 
       it "assigns the requested market as @market" do

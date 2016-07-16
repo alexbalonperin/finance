@@ -24,11 +24,15 @@ RSpec.describe CompaniesController, type: :controller do
   # Company. As you add validations to Company, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    FactoryGirl.build(:company).attributes.symbolize_keys
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+        :name => nil,
+        :symbol => nil,
+        :industry_id => nil
+    }
   }
 
   # This should return the minimal set of values that should be in the session
@@ -36,11 +40,13 @@ RSpec.describe CompaniesController, type: :controller do
   # CompaniesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET #index" do
+  describe "GET #list" do
     it "assigns all companies as @companies" do
       company = Company.create! valid_attributes
-      get :index, {}, valid_session
-      expect(assigns(:companies)).to eq([company])
+      get :list, { :format => :json }, valid_session
+      body = JSON.parse(response.body)
+      expect(body['rows'].map(&:symbolize_keys)).to eq([company.to_json])
+      expect(body['total']).to eq(1)
     end
   end
 
@@ -103,14 +109,18 @@ RSpec.describe CompaniesController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {
+            :name => 'Apples',
+            :symbol => 'AAPLS'
+        }
       }
 
       it "updates the requested company" do
         company = Company.create! valid_attributes
         put :update, {:id => company.to_param, :company => new_attributes}, valid_session
         company.reload
-        skip("Add assertions for updated state")
+        expect(company.name).to eq('Apples')
+        expect(company.symbol).to eq('AAPLS')
       end
 
       it "assigns the requested company as @company" do

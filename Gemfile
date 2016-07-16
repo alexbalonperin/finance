@@ -50,7 +50,8 @@ gem "stock_quote"
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-  gem 'faker'
+  gem 'factory_girl_rails'
+  gem 'rspec-rails'
 end
 
 group :development do
@@ -71,7 +72,8 @@ group :development do
 end
 
 group :test do
-  gem 'factory_girl_rails'
-  gem 'rspec-rails'
+  gem 'faker'
+  gem 'capybara'
+  gem 'guard-rspec'
+  gem 'launchy'
 end
-

@@ -24,11 +24,13 @@ RSpec.describe SectorsController, type: :controller do
   # Sector. As you add validations to Sector, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    FactoryGirl.attributes_for(:sector)
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+        :name => nil
+    }
   }
 
   # This should return the minimal set of values that should be in the session
@@ -103,14 +105,16 @@ RSpec.describe SectorsController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {
+            :name => 'New Name'
+        }
       }
 
       it "updates the requested sector" do
         sector = Sector.create! valid_attributes
         put :update, {:id => sector.to_param, :sector => new_attributes}, valid_session
         sector.reload
-        skip("Add assertions for updated state")
+        expect(sector.name).to eq('New Name')
       end
 
       it "assigns the requested sector as @sector" do
