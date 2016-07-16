@@ -39,7 +39,7 @@ gem "passenger", ">= 5.0.25", require: "phusion_passenger/rack_handler"
 gem 'require_reloader'
 
 # gem 'yahoo-finance', :github => 'herval/yahoo-finance', :branch => 'markets_improvements'
-gem 'yahoo-finance', :path => '/Users/abalonperin/dev/yahoo-finance'
+gem 'yahoo-finance', :path => '/Users/abalonperin/dev/yahoo-finance', :require => false
 
 gem "stock_quote"
 

@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
     @sort = params[:sort]
     @order = params[:order]
     raise SecurityException.new("Sort parameter '#{@sort}' not allowed for #{self.class}") unless @sort.nil? || self.columns.include?(@sort)
-    raise SecurityException.new("Order parameter '#{@order}' not allowed for #{self.class}") unless %w[asc desc].include?(@order)
+    raise SecurityException.new("Order parameter '#{@order}' not allowed for #{self.class}") unless @order.nil? || %w[asc desc].include?(@order)
   end
 
   def catch_exception
