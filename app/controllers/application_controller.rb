@@ -7,9 +7,9 @@ class ApplicationController < ActionController::Base
 
   def catch_exception
     yield
-  rescue StandardError => e
-    flash[:error] = e.message
-    logger.error("WARNING: #{e.message}")
+  rescue StandardError => exception
+    flash[:error] = exception.message
+    logger.error("WARNING: #{exception.message}")
     redirect_to '/'
   end
 

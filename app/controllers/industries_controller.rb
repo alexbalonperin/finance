@@ -16,7 +16,7 @@ class IndustriesController < ApplicationController
     industries = Company.joins(:industry).where("industries.name != 'n/a'").group('industries.name').having('count(*) > ?', 40).count
 
     respond_to do |format|
-      format.json { render json:  industries.sort_by {|k, v| v}.map { |k, v| {name: k, y: v} } }
+      format.json { render json:  industries.sort_by {|_, v| v}.map { |k, v| {name: k, y: v} } }
     end
   end
 

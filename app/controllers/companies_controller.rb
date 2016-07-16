@@ -11,15 +11,16 @@ class CompaniesController < ApplicationController
                      .order("#{params[:sort] || 'companies.name'} #{params[:order]}")
                      .limit(params[:limit])
                      .offset(params[:offset])
-    if params[:search].present?
+    search = params[:search]
+    if search.present?
       @companies = @companies
                        .joins([:industry, :sector])
                        .where('industries.name ~* ? OR sectors.name ~* ? OR companies.name ~* ? OR lower(companies.symbol) = lower(?)',
-                              params[:search], params[:search], params[:search], params[:search])
+                              search, search, search, search)
       @count = Company
                    .joins([:industry, :sector])
                    .where('industries.name ~* ? OR sectors.name ~* ? OR companies.name ~* ? OR lower(companies.symbol) = lower(?)',
-                          params[:search], params[:search], params[:search], params[:search])
+                          search, search, search, search)
                     .count
     else
       @count = Company.count
