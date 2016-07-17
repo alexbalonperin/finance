@@ -23,7 +23,7 @@ class HistoricalDataController < ApplicationController
   def prices
     historical_data = @company.historical_data
                            .order("#{@sort || 'trade_date'} #{@order || 'desc'}")
-                           .limit(365)
+                           .limit(params[:n_days])
     result = historical_data.map { |data| [data.trade_date_as_timestamp, data.adjusted_close.to_f] }
                  .sort_by { |el| el[0] }
     respond_to do |format|

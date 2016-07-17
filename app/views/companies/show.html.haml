@@ -30,7 +30,7 @@
     .element-container
       .title Historical Prices
       .content
-        #company_chart{'data-url' => "/companies/#{@company.id}/historical_data/prices",
+        #company_chart{'data-url' => "/companies/#{@company.id}/historical_data/prices?n_days=365",
                        'data-name' => @company.name }
 
 .row
