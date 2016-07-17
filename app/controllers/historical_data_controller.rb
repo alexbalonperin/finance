@@ -1,6 +1,6 @@
 class HistoricalDataController < ApplicationController
   before_filter :load_company
-  before_filter :sanitize_order_params, only: [:list, :prices]
+  before_filter(only: [:list, :prices]) {  sanitize_order_params(HistoricalDatum) }
   before_action :set_historical_datum, only: [:show, :edit, :update, :destroy]
 
   # GET /historical_data

@@ -38,6 +38,7 @@ $ ->
       field: 'details'
       title: 'Details'
       align: 'left'
+      sortable: false
     }
     {
       title: ''
