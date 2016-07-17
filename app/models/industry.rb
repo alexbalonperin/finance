@@ -4,4 +4,8 @@ class Industry < ActiveRecord::Base
 
   validates :name, :sector, presence: true
 
+  def sector_name
+    sector.name
+  end
+
 end

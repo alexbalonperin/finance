@@ -1,9 +1,9 @@
-= form_for([@company, @historical_datum]) do |f|
-  - if @historical_datum.errors.any?
+= form_for([company, historical_datum]) do |f|
+  - if historical_datum.errors.any?
     #error_explanation
-      %h2= "#{pluralize(@historical_datum.errors.count, "error")} prohibited this historical_datum from being saved:"
+      %h2= "#{pluralize(historical_datum.errors.count, "error")} prohibited this historical_datum from being saved:"
       %ul
-        - @historical_datum.errors.full_messages.each do |msg|
+        - historical_datum.errors.full_messages.each do |msg|
           %li= msg
 
   .field

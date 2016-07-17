@@ -74,7 +74,7 @@ namespace :populate do
                     :market_id => market.id)
       end
       cur_companies = Company.where("market_id = #{market.id}").select(:name).map(&:name)
-      companies = client.companies(market.country.code, market.name)
+      companies = client.companies(market.country_code, market.name)
       missing_companies = companies.reject { |company| cur_companies.include?(company.name) }
       missing_companies = missing_companies.map(&company_to_company).uniq(&:name)
       next unless missing_companies.size > 0

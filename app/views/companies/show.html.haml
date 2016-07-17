@@ -10,10 +10,10 @@
           = raw @company.name
         %p
           %strong Sector:
-          = link_to @company.sector.name, sector_path(@company.sector.id)
+          = link_to @company.sector_name, sector_path(@company.sector_id)
         %p
           %strong industry:
-          = link_to @company.industry.name, industry_path(@company.industry_id)
+          = link_to @company.industry_name, industry_path(@company.industry_id)
         %p
           %strong Symbol:
           = @company.symbol

@@ -1,6 +1,6 @@
 %h1 Editing historical_datum
 
-= render 'form'
+= render 'form', company: @company, historical_datum: @historical_datum
 
 = link_to 'Show', company_historical_datum_path(@company, @historical_datum)
 \|

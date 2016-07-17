@@ -1,2 +1,0 @@
-module HistoricalDataHelper
-end

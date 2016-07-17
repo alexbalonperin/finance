@@ -13,6 +13,14 @@ class Company < ActiveRecord::Base
 
   validates :industry, :name, :symbol, presence: true
 
+  def industry_name
+    industry.name
+  end
+
+  def sector_name
+    sector.name
+  end
+
   def latest_historical_data
     historical_data.order('trade_date desc').limit(1)
   end
