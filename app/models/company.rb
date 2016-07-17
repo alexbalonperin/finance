@@ -21,6 +21,10 @@ class Company < ActiveRecord::Base
     sector.name
   end
 
+  def sector_id
+    sector.id
+  end
+
   def latest_historical_data
     historical_data.order('trade_date desc').limit(1)
   end
